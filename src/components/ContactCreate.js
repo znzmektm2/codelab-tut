@@ -27,7 +27,15 @@ class ContactCreate extends Component {
         this.setState({
             name: '',
             phone: ''
-        })
+        });
+
+        this.nameInput.focus();
+    }
+
+    handleKeyPress = (e) => {
+        if(e.charCode===13){ //charCode 가 13 이면 Enter 라는 뜻
+            this.handleClick();
+        }
     }
 
     render() {
@@ -35,8 +43,10 @@ class ContactCreate extends Component {
             <div>   
                 <h2>Create Contact</h2>
                 <p>
-                    <input type="text" name="name" placeholder="name" value={this.state.name} onChange={this.handleChange} />
-                    <input type="text" name="phone" placeholder="phone" value={this.state.phone} onChange={this.handleChange} />
+                    <input type="text" name="name" placeholder="name" value={this.state.name} onChange={this.handleChange} 
+                        ref={(ref) => { this.nameInput = ref }} />
+                    <input type="text" name="phone" placeholder="phone" value={this.state.phone} onChange={this.handleChange} 
+                        onKeyPress={this.handleKeyPress}/>
                 </p>
                 <button onClick={this.handleClick}>create</button>
             </div>

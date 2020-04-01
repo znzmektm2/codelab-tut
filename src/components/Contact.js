@@ -19,6 +19,21 @@ class Contact extends Component {
         }        
     }
 
+    componentWillMount() { //컴포넌트가 돔 위에 생기기 전에 실행되는 API
+        const contactData = localStorage.contactData;
+        if(contactData) {
+            this.setState({
+                contactData: JSON.parse(contactData)
+            })
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) { //컴포넌트 state가 업데이트 될 때마다 실행되는 API
+        if(JSON.stringify(prevState.contactData) !== JSON.stringify(this.state.contactData)) {
+            localStorage.contactData = JSON.stringify(this.state.contactData);
+        }
+    }
+ 
     handleChange = (e) => {
         this.setState({
             keyword: e.target.value
@@ -29,8 +44,6 @@ class Contact extends Component {
         this.setState({
             selectedKey: key
         });
-
-        console.log(key, 'is selected!');
     }
 
     handleCreate = (contact) => {
@@ -40,11 +53,13 @@ class Contact extends Component {
     }
 
     handleRemove = () => {
+        if (this.state.selectedKey < 0){
+            return;
+        }
+
         this.setState({
-            contactData: update(this.state.contactData,
-                { $splice: [[this.state.selectedKey, 1]] }    
-            ),
-            sekectedKey: -1
+            contactData: update(this.state.contactData, { $splice: [[this.state.selectedKey, 1]] } ),
+            selectedKey: -1
         });
     }
 
@@ -63,20 +78,7 @@ class Contact extends Component {
 
     render() {        
         const mapToComponent = (data) => {
-            data.sort(function(a, b) {
-                // 배열 이름 순으로 나열하기
-                var nameA = a.name.toUpperCase(); // ignore upper and lowercase
-                var nameB = b.name.toUpperCase(); // ignore upper and lowercase
-                if (nameA < nameB) {
-                  return -1;
-                }
-                if (nameA > nameB) {
-                  return 1;
-                }
-              
-                // names must be equal
-                return 0;
-            }); 
+            data.sort(); 
             data = data.filter((contact) => {
                 return contact.name.toLowerCase().indexOf(this.state.keyword.toLowerCase()) > -1;
             });
@@ -91,7 +93,12 @@ class Contact extends Component {
                 <h1>Contacts</h1>
                 <input name="keyword" placeholder="Search" value={this.state.keyword} onChange={this.handleChange}/>
                 { mapToComponent(this.state.contactData) }
-                <ContactDetails isSelected={this.state.selectedKey != -1} contact={this.state.contactData[this.state.selectedKey]}/>
+                <ContactDetails 
+                    onRemove={this.handleRemove} 
+                    isSelected={this.state.selectedKey !== -1} 
+                    contact={this.state.contactData[this.state.selectedKey]}
+                    onEdit={this.handleEdit}
+                />
                 <ContactCreate onCreate={this.handleCreate} />
             </div>
         );
