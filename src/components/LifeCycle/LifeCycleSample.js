@@ -42,7 +42,7 @@ class LifeCycleSample extends Component {
   }
 
   getSnapshotBeforeUpdate(prevProps, prevState) {
-    console.log('getSnapshotBeforUpdate');
+    console.log('getSnapshotBeforUpdate', prevProps, prevState);
     if(prevProps.color !== this.props.color) {
       return this.myRef.style.color;
     }
@@ -50,7 +50,7 @@ class LifeCycleSample extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log('componentDidUpdate', prevProps, prevState);
+    console.log('componentDidUpdate', this.props.color, prevProps.color);
     if(snapshot) {
       console.log('업데이트 되기 직전 색상: ', snapshot);
     }
