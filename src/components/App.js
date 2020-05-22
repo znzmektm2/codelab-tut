@@ -1,18 +1,14 @@
-import React, { Component } from 'react';
-import Contact from './Contact';
-import Test from './LifeCycle/Test';
+import React, { Component } from "react";
+import Contact from "./Contact";
 
 class App extends Component {
-    
-    render() {
-        return (
-            <div>
-                <Test/>
-                ==============================
-                {/* <Contact />  */}
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div>
+        <Contact />
+      </div>
+    );
+  }
 }
 
 export default App;
