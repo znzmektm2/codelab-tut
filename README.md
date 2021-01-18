@@ -1,4 +1,4 @@
-# 리액트 토이 프로젝트
+# 리액트 Contact 토이 프로젝트
 
 - Contact 검색기능 구현
   - input
